@@ -18,7 +18,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.Collection;
 
-@RequestMapping("lot")
+@RequestMapping("/")
 @RestController
 public class AuctionController {
     private final LotService lotService;
@@ -110,7 +110,7 @@ public class AuctionController {
         }
         return ResponseEntity.ok().build();
     }
-    @PostMapping("/lot")
+    @PostMapping("lot")
     public ResponseEntity<LotDTO> createLot(@RequestBody CreateLotDTO createLotDTO){
         if(!lotService.chekLotCorrect(createLotDTO)) {
             return ResponseEntity.badRequest().build();
