@@ -1,4 +1,4 @@
-package com.example.easy_auction.model;
+package com.example.easy_auction.model.projection;
 
 import java.time.LocalDateTime;
 
