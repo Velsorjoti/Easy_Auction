@@ -9,7 +9,7 @@ import java.util.List;
 @Entity
 public class Lot {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     @Enumerated(value = EnumType.STRING)
     private LotStatus status;
@@ -23,15 +23,6 @@ public class Lot {
     public Lot() {
     }
 
-    public Lot(Integer id, LotStatus status, String title, String description, Integer startPrice, Integer bidPrice, List<Bid> bidList) {
-        this.id = id;
-        this.status = status;
-        this.title = title;
-        this.description = description;
-        this.startPrice = startPrice;
-        this.bidPrice = bidPrice;
-        this.bidList = bidList;
-    }
 
     public Integer getId() {
         return id;

@@ -9,16 +9,16 @@ public class BidDTO {
     private Integer id;
     private String bidderName;
     private LocalDateTime bidDate;
-    private Integer lotId;
+    private Integer lot;
 
     public BidDTO() {
     }
 
-    public BidDTO(Integer id, String bidderName, LocalDateTime bidDate, Integer lotId) {
+    public BidDTO(Integer id, String bidderName, LocalDateTime bidDate, Integer lot) {
         this.id = id;
         this.bidderName = bidderName;
         this.bidDate = bidDate;
-        this.lotId = lotId;
+        this.lot = lot;
     }
 
     public Integer getId() {
@@ -46,11 +46,11 @@ public class BidDTO {
     }
 
     public Integer getLot() {
-        return lotId;
+        return lot;
     }
 
     public void setLot(Integer lotId) {
-        this.lotId = lotId;
+        this.lot = lotId;
     }
 
     public static BidDTO toBidtoBidDTO(Bid bid){

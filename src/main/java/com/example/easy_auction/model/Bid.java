@@ -6,20 +6,16 @@ import java.time.LocalDateTime;
 @Entity
 public class Bid {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String bidderName;
     private LocalDateTime bidDate;
     @ManyToOne(fetch = FetchType.LAZY)
-    private Lot lotId;
+    private Lot lot;
 
     public Bid() {
     }
 
-    public Bid(String bidderName, LocalDateTime bidDate) {
-        this.bidderName = bidderName;
-        this.bidDate = bidDate;
-    }
 
     public Integer getId() {
         return id;
@@ -30,11 +26,11 @@ public class Bid {
     }
 
     public Lot getLot() {
-        return lotId;
+        return lot;
     }
 
     public void setLot(Lot lotId) {
-        this.lotId = lotId;
+        this.lot = lotId;
     }
 
     public String getBidderName() {

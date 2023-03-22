@@ -23,7 +23,7 @@ public class BidService {
     }
 
     public BidDTO createBid(BidDTO bidDTO){
-        Lot lot = LotDTO.fromLotDTOtoLot(lotService.getLotById(bidDTO.getId()));
+        Lot lot = LotDTO.fromLotDTOtoLot(lotService.getLotById(bidDTO.getLot()));
         Bid bid = BidDTO.toBidDTOtoBid(bidDTO);
         bid.setLot(lot);
         bid.setBidDate(LocalDateTime.now());

@@ -38,7 +38,7 @@ public class LotService {
 
     public Collection<LotDTO> getAllStatus(LotStatus status, Integer page) {
         PageRequest pageRequest = PageRequest.of((page - 1), 5);
-        return lotRepositary.findAllByStatus(status).stream().map(LotDTO::fromLottoLotDTO).collect(Collectors.toList());
+        return lotRepositary.findAllByStatus(status, pageRequest).stream().map(LotDTO::fromLottoLotDTO).collect(Collectors.toList());
     }
 
     public Projection getInfoAboutFistBid(Integer id){
@@ -59,7 +59,7 @@ public class LotService {
         lotRepositary.save(lotStart);
     }
 
-    public void LotStatusSopped(Integer id) {
+    public void LotStatusStopped(Integer id) {
         Lot lotStop = lotRepositary.findById(id).get();
         lotStop.setStatus(LotStatus.STOPPED);
         lotRepositary.save(lotStop);
@@ -68,7 +68,7 @@ public class LotService {
     private FistAndLastLotBidDTO getInfoOfLastBid(Integer id) {
         FistAndLastLotBidDTO fistAndLastLotBidDTO = new FistAndLastLotBidDTO();
         fistAndLastLotBidDTO.setBidDate(bidRepository.getInfoAboutFistBid(id).getBidDate());
-        fistAndLastLotBidDTO.setName(bidRepository.getLastBid(id).getName());
+        fistAndLastLotBidDTO.setName(bidRepository.getLastBid(id).getBidderName());
         return fistAndLastLotBidDTO;
     }
 

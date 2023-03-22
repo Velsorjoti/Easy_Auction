@@ -94,13 +94,13 @@ public class AuctionController {
         return ResponseEntity.ok().build();
     }
     @PostMapping("lot/{id}/stop")
-    public ResponseEntity<Lot> soppedBidding(@PathVariable Integer id) {
+    public ResponseEntity<Lot> stoppedBidding(@PathVariable Integer id) {
         LotDTO lotStopping = lotService.getLotById(id);
         if(lotStopping == null){
             return ResponseEntity.notFound().build();
         }
         if (lotStopping.getStatus().equals(LotStatus.STARTED)) {
-            lotService.LotStatusSopped(id);
+            lotService.LotStatusStopped(id);
         }
         if(lotStopping.getStatus().equals(LotStatus.STOPPED)) {
             return ResponseEntity.ok().build();
