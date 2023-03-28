@@ -1,23 +1,36 @@
 package com.example.easy_auction.model;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 public class Bid {
     @Id
-    @GeneratedValue
-    private Integer idB;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
     private String bidderName;
-    private String bidDate;
+    private LocalDateTime bidDate;
     @ManyToOne(fetch = FetchType.LAZY)
     private Lot lot;
 
     public Bid() {
     }
 
-    public Bid(String bidderName, String bidDate) {
-        this.bidderName = bidderName;
-        this.bidDate = bidDate;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public Lot getLot() {
+        return lot;
+    }
+
+    public void setLot(Lot lotId) {
+        this.lot = lotId;
     }
 
     public String getBidderName() {
@@ -28,11 +41,12 @@ public class Bid {
         this.bidderName = bidderName;
     }
 
-    public String getBidDate() {
+    public LocalDateTime getBidDate() {
         return bidDate;
     }
 
-    public void setBidDate(String bidDate) {
+    public void setBidDate(LocalDateTime bidDate) {
         this.bidDate = bidDate;
     }
+
 }
