@@ -1,14 +1,14 @@
 package com.example.easy_auction.controller;
 import com.example.easy_auction.DTO.*;
-import org.apache.commons.csv.CSVFormat;
-import org.apache.commons.csv.CSVPrinter;
 
 import com.example.easy_auction.enumes.LotStatus;
 import com.example.easy_auction.model.Bid;
 import com.example.easy_auction.model.Lot;
-import com.example.easy_auction.model.projection.Projection;
+import com.example.easy_auction.model.projection.BidNameAndBidDate;
 import com.example.easy_auction.service.BidService;
 import com.example.easy_auction.service.LotService;
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVPrinter;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,26 +31,26 @@ public class AuctionController {
     }
 
     @GetMapping("lot/{id}/fist")
-    public ResponseEntity<Projection> getInfoAboutFistBid(@PathVariable Integer id) {
+    public ResponseEntity<BidNameAndBidDate> getInfoAboutFistBid(@PathVariable Integer id) {
         if (lotService.getLotById(id) == null) {
             return ResponseEntity.notFound().build();
         }
         if (lotService.getLotById(id).getStatus().equals(LotStatus.CREATED)) {
             return ResponseEntity.badRequest().build();
         }
-        Projection projection = lotService.getInfoAboutFistBid(id);
+        BidNameAndBidDate projection = lotService.getInfoAboutFistBid(id);
         return ResponseEntity.ok(projection);
     }
 
     @GetMapping("lot/{id}/frequent")
-    public ResponseEntity<Projection> getInfoAboutAvidGambler(@PathVariable Integer id) {
+    public ResponseEntity<BidNameAndBidDate> getInfoAboutAvidGambler(@PathVariable Integer id) {
         if (lotService.getLotById(id) == null) {
             return ResponseEntity.notFound().build();
         }
         if (lotService.getLotById(id).getStatus().equals(LotStatus.CREATED)) {
             return ResponseEntity.badRequest().build();
         }
-        Projection projection = lotService.getAvidGambler(id);
+        BidNameAndBidDate projection = lotService.getAvidGambler(id);
         return ResponseEntity.ok(projection);
 
     }
@@ -73,7 +73,7 @@ public class AuctionController {
             return ResponseEntity.ok().build();
         }
         if (lotStarting.getStatus().equals(LotStatus.CREATED)) {
-            lotService.LotStatusStart(id);
+            lotService.lotStatusStart(id);
         }
         if(lotStarting.getStatus().equals(LotStatus.STOPPED)) {
             return ResponseEntity.badRequest().build();
@@ -81,7 +81,7 @@ public class AuctionController {
         return ResponseEntity.ok().build();
     }
     @PostMapping("lot/{id}/bid")
-    public ResponseEntity<Bid> PlaceBidsOnLot(@PathVariable Integer id, @RequestBody BidDTO bidDTO) {
+    public ResponseEntity<Bid> placeBidsOnLot(@PathVariable Integer id, @RequestBody BidDTO bidDTO) {
         LotDTO lotBid = lotService.getLotById(id);
         if (lotBid == null) {
             return ResponseEntity.notFound().build();
@@ -100,7 +100,7 @@ public class AuctionController {
             return ResponseEntity.notFound().build();
         }
         if (lotStopping.getStatus().equals(LotStatus.STARTED)) {
-            lotService.LotStatusStopped(id);
+            lotService.lotStatusStopped(id);
         }
         if(lotStopping.getStatus().equals(LotStatus.STOPPED)) {
             return ResponseEntity.ok().build();
@@ -131,24 +131,13 @@ public class AuctionController {
 
     @GetMapping("lot/export")
     public void downLoadSCVP (HttpServletResponse httpServletResponse) throws IOException {
-        Collection<FullDTO> fullDTOS = lotService.getAllLotsTransfer();
-        StringWriter stringWriter = new StringWriter();
-        CSVPrinter scvPrinter = new  CSVPrinter(stringWriter, CSVFormat.DEFAULT);
-        for(FullDTO fullDTO:fullDTOS){
-            scvPrinter.printRecord(
-                    fullDTO.getId(),
-                    fullDTO.getTitle(),
-                    fullDTO.getStatus(),
-                    fullDTO.getLastBid() != null ? fullDTO.getLastBid().getName() : "",
-                    fullDTO.getCurrentPrice());
-        }
-        scvPrinter.flush();
         httpServletResponse.setContentType("text/csv");
         httpServletResponse.setHeader("Content-Disposition", "attachment; filename:\"lot.csv\"");
-       PrintWriter printWriter = httpServletResponse.getWriter();
-       printWriter.write(stringWriter.toString());
-       printWriter.flush();
-       printWriter.close();
+        PrintWriter printWriter = httpServletResponse.getWriter();
+        printWriter.write(lotService.CSVLoad().toString());
+        printWriter.flush();
+        printWriter.close();
     }
+
 
 }
